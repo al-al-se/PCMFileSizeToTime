@@ -1,0 +1,88 @@
+<html>
+<!--
+   Copyright 2019 Alekseev Aleksandr al.al.se@yandex.ru
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <head>
+        <script>
+            function OnClickCalc()
+            {
+                let data_size = parseFloat(document.calc_form.data_size.value);
+
+                let data_size_units = document.calc_form.size_units.value;
+
+                if (data_size_units == "КБ (килобайт = 1024 байт)")
+                {
+                    data_size *= 1024;
+                }
+
+                if (data_size_units == "МБ (мегабайт = 1024 * 1024 байт)")
+                {
+                    data_size *= 1024 * 1024;
+                }
+
+                const sample_rate = parseFloat(document.calc_form.sample_rate.value);
+
+                const bit_per_sample = parseFloat(document.calc_form.sample_size.value);
+
+                const byte_per_sample = bit_per_sample / 8;
+
+                const channels_count = parseFloat(document.calc_form.channels_count.value);
+
+                const milisec = data_size / (sample_rate / 1000) / byte_per_sample / channels_count;
+
+                document.calc_form.result_milisec.value = milisec.toString();
+
+                const seconds = Math.floor(milisec / 1000);
+                
+                document.calc_form.result_sec.value = seconds.toString();
+
+                const miliec_rem = milisec % 1000;
+
+                const minutes = Math.floor(seconds / 60);
+
+                document.calc_form.result_min.value = minutes.toString();
+                
+                const sec_rem = seconds % 60;
+
+                const hours = Math.floor(minutes / 60);
+
+                const min_rem = minutes % 60;
+
+                const result2 = "" + hours.toString() + "ч. " + min_rem.toString() + "мин. " + sec_rem.toString() + "сек. ";
+
+                document.calc_form.result.value = result2;
+            }
+        </script>
+    </head>
+    <body>
+        <H1>Калькулятор для расчета длительность порции данных PCM</H1>
+        <form name="calc_form">
+        Частота <input type="text" name="sample_rate" value="16000"> Гц <br> 
+        Битность <input type="text" name="sample_size" value="16"> бит <br> 
+        Число каналов <input type="text" name="channels_count" value="1">  <br> 
+        Размер данных <input type="text" name="data_size" value="1"> 
+        <select name="size_units">
+        <option>Б</option>
+        <option>КБ (килобайт = 1024 байт)</option>
+        <option>МБ (мегабайт = 1024 * 1024 байт)</option>
+        </select><br><br>
+        <input type="button" name="do" value="Вычислить" onClick="OnClickCalc();"> <br> <br>
+        Всего <input type="text" name="result_milisec" value="0"> милисекунд<br> 
+        Всего <input type="text" name="result_sec" value="0"> секунд<br> 
+        Всего <input type="text" name="result_min" value="0"> минут<br> 
+        Или <input type="text" name="result" value="0"> <br> 
+        </form>
+        <br><br>
+        Разработано Алексеевым А.С. (al.al.se@yandex.ru)
+    </body>   
+</html>
